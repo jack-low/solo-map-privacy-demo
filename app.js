@@ -28,11 +28,12 @@
     renderManifest();
   }));
   document.getElementById('install').addEventListener('click', async (event) => {
-    event.currentTarget.disabled = true;
-    event.currentTarget.textContent = 'creating install session...';
+    const button = event.currentTarget;
+    button.disabled = true;
+    button.textContent = 'creating install session...';
     await sleep(700);
     state.installed = true;
-    event.currentTarget.textContent = '✓ install_session_demo_7f2a';
+    button.textContent = '✓ install_session_demo_7f2a';
     terminal.innerHTML += '\n<span>✓ install session created: ins_demo_7f2a</span>';
     addLog('agent.install_session.created', state.client, 'OK');
   });
@@ -48,12 +49,13 @@
   });
 
   document.getElementById('execute').addEventListener('click', async (event) => {
+    const button = event.currentTarget;
     if (!state.approved) {
-      event.currentTarget.textContent = 'Scope承認が必要です';
+      button.textContent = 'Scope承認が必要です';
       document.getElementById('tools').scrollIntoView({ behavior: 'smooth' });
       return;
     }
-    event.currentTarget.disabled = true;
+    button.disabled = true;
     const stages = [...document.querySelectorAll('.stage')];
     stages.forEach((stage) => { stage.className = 'stage'; stage.querySelector('i').textContent = 'WAIT'; });
     for (const stage of stages) {
@@ -67,8 +69,8 @@
     }
     const product = document.getElementById('product').selectedOptions[0].textContent;
     document.getElementById('result').innerHTML = `<span>STATUS</span><b>CHECKOUT CREATED</b><code>chk_demo_${Date.now().toString().slice(-6)} / ${product}</code>`;
-    event.currentTarget.textContent = '✓ execution completed';
-    event.currentTarget.disabled = false;
+    button.textContent = '✓ execution completed';
+    button.disabled = false;
   });
 
   function addLog(event, actor, status) {

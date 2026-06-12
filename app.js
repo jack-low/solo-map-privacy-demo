@@ -1,65 +1,107 @@
 (function () {
-  const products = [
-    { id: 'water', icon: '水', name: '天然水 2L × 12本', category: '飲料', price: 1680, score: 96, tag: '補充のタイミング', reason: '残量から約3日後に不足する見込みです。', reasons: ['消費ログから補充タイミングを検出', '過去価格と在庫状況を比較', '配送先は匿名トークンで参照する設計'] },
-    { id: 'coffee', icon: '珈', name: 'オリジナルブレンド コーヒー豆 1kg', category: '飲料', price: 2480, score: 91, tag: 'セール中', reason: 'いつもの購入周期に一致しています。', reasons: ['前回購入から28日経過', '通常価格より500円安い', '定期購入には自動変更しない'] },
-    { id: 'filter', icon: '空', name: '加湿器用 交換フィルター', category: '日用品', price: 980, score: 89, tag: '季節のおすすめ', reason: '前回交換から推奨日数を超過しています。', reasons: ['交換目安を12日超過', '型番互換性を確認済み', '健康関連のためOwner承認が必須'] },
-    { id: 'soap', icon: '洗', name: '衣料用洗剤 詰め替え 1.2L', category: '日用品', price: 598, score: 84, tag: 'よく一緒に購入', reason: '水の注文と同梱すると配送をまとめられます。', reasons: ['同梱で配送回数を削減', '購入頻度と在庫推定が一致', '最安値より使い慣れた商品を優先'] },
-    { id: 'care', icon: '美', name: 'シャンプー モイスト 500ml', category: '健康', price: 698, score: 80, tag: '値下げ', reason: '登録商品の価格が下がりました。', reasons: ['過去平均より20%安い', '代替品への勝手な変更なし', '今回は見送り可能'] },
-    { id: 'protein', icon: 'P', name: 'プロテイン 1kg', category: '健康', price: 3480, score: 77, tag: '体調管理', reason: '運動ログと購入履歴の周期に合致しています。', reasons: ['架空の運動ログを参照', '予算上限5,000円以内', '健康判断は行わず補充のみ提案'] }
-  ];
-  let selected = products[0];
+  const state = { client: 'Codex App', method: 'mcp', installed: false, approved: false };
+  const manifest = document.getElementById('manifest');
+  const terminal = document.getElementById('terminal');
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const yen = (value) => new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY', maximumFractionDigits: 0 }).format(value);
-  const grid = document.getElementById('product-grid');
-
-  function render(category) {
-    const list = category === 'すべて' ? products : products.filter((item) => item.category === category);
-    document.getElementById('count').textContent = `${list.length}件の提案`;
-    grid.innerHTML = list.map((item) => `<button type="button" class="product-card${item.id === selected.id ? ' selected' : ''}" data-id="${item.id}">
-      <span class="tag">${item.tag}</span><span class="product-icon">${item.icon}</span>
-      <strong>${item.name}</strong><small>${item.reason}</small><b>${yen(item.price)}</b>
-      <em>AIおすすめ度 ${item.score}%</em><i>→</i></button>`).join('');
-    grid.querySelectorAll('.product-card').forEach((button) => button.addEventListener('click', () => select(button.dataset.id)));
+  function renderManifest() {
+    manifest.textContent = JSON.stringify({
+      name: 'solo-map-commerce',
+      client: state.client,
+      transport: state.method,
+      tools: ['search_catalog', 'create_purchase_intent', 'create_checkout'],
+      auth: state.method === 'mcp' ? 'oauth + owner approval' : 'scoped agent key'
+    }, null, 2);
+    document.getElementById('method').textContent = state.method.toUpperCase();
   }
 
-  function select(id, shouldScroll = true) {
-    selected = products.find((item) => item.id === id);
-    document.getElementById('detail-icon').textContent = selected.icon;
-    document.getElementById('detail-name').textContent = selected.name;
-    document.getElementById('detail-price').textContent = yen(selected.price);
-    document.getElementById('detail-score').textContent = `${selected.score}%`;
-    document.getElementById('detail-reasons').innerHTML = selected.reasons.map((reason) => `<li>${reason}</li>`).join('');
-    document.getElementById('assistant-card').innerHTML = `<b>${selected.tag}</b><strong>${selected.name}</strong><span>${selected.reason}</span>`;
-    render(document.querySelector('.filters .active').dataset.category);
-    if (shouldScroll) document.getElementById('detail').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-
-  document.querySelectorAll('.filters button').forEach((button) => button.addEventListener('click', () => {
-    document.querySelectorAll('.filters button').forEach((item) => item.classList.remove('active'));
+  document.querySelectorAll('[data-jump]').forEach((button) => button.addEventListener('click', () => document.getElementById(button.dataset.jump).scrollIntoView({ behavior: 'smooth' })));
+  document.getElementById('copy-command').addEventListener('click', async () => {
+    await navigator.clipboard?.writeText('npx solo-map-agent install');
+    document.getElementById('copy-command').textContent = 'copied: npx solo-map-agent install';
+  });
+  document.querySelectorAll('.client').forEach((button) => button.addEventListener('click', () => {
+    document.querySelectorAll('.client').forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
-    render(button.dataset.category);
+    state.client = button.dataset.client;
+    state.method = button.dataset.method;
+    renderManifest();
   }));
-  document.querySelectorAll('input[type="range"]').forEach((input) => input.addEventListener('input', () => {
-    input.previousElementSibling.textContent = input.value;
-    const adjustment = Math.round((Number(input.value) - 50) / 20);
-    products.forEach((item, index) => { item.score = Math.max(65, Math.min(99, 94 - index * 4 + adjustment)); });
-    render(document.querySelector('.filters .active').dataset.category);
-    select(selected.id, false);
-  }));
-  document.querySelectorAll('[data-scroll]').forEach((button) => button.addEventListener('click', () => document.getElementById(button.dataset.scroll).scrollIntoView({ behavior: 'smooth' })));
-  document.getElementById('window-shopping').addEventListener('click', () => {
-    document.querySelector('[data-category="日用品"]').click();
-    document.getElementById('recommend').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('install').addEventListener('click', async (event) => {
+    event.currentTarget.disabled = true;
+    event.currentTarget.textContent = 'creating install session...';
+    await sleep(700);
+    state.installed = true;
+    event.currentTarget.textContent = '✓ install_session_demo_7f2a';
+    terminal.innerHTML += '\n<span>✓ install session created: ins_demo_7f2a</span>';
+    addLog('agent.install_session.created', state.client, 'OK');
   });
-  document.getElementById('reroll').addEventListener('click', () => select(products[(products.indexOf(selected) + 1) % products.length].id));
-  document.getElementById('skip').addEventListener('click', () => select(products[(products.indexOf(selected) + 1) % products.length].id));
-  document.getElementById('approve').addEventListener('click', () => {
-    const receipt = document.getElementById('receipt');
-    document.getElementById('receipt-copy').textContent = `${selected.name}（${yen(selected.price)}）のOwner承認をモック記録しました。実際の注文・決済・通信は発生していません。`;
-    receipt.hidden = false;
-    receipt.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('approve-scopes').addEventListener('click', (event) => {
+    if (!state.installed) {
+      event.currentTarget.textContent = '先にInstall Sessionを作成';
+      return;
+    }
+    state.approved = true;
+    event.currentTarget.textContent = '✓ Scope approved';
+    document.querySelectorAll('#scopes label:has(input:checked)').forEach((item) => item.classList.add('approved'));
+    addLog('owner.scopes.approved', 'demo-owner', 'OK');
   });
 
-  render('すべて');
-  select('water', false);
+  document.getElementById('execute').addEventListener('click', async (event) => {
+    if (!state.approved) {
+      event.currentTarget.textContent = 'Scope承認が必要です';
+      document.getElementById('tools').scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    event.currentTarget.disabled = true;
+    const stages = [...document.querySelectorAll('.stage')];
+    stages.forEach((stage) => { stage.className = 'stage'; stage.querySelector('i').textContent = 'WAIT'; });
+    for (const stage of stages) {
+      stage.classList.add('running');
+      stage.querySelector('i').textContent = 'RUN';
+      await sleep(650);
+      stage.classList.remove('running');
+      stage.classList.add('done');
+      stage.querySelector('i').textContent = 'PASS';
+      addLog(`tool.${stage.dataset.stage}.completed`, 'codex-demo-01', 'PASS');
+    }
+    const product = document.getElementById('product').selectedOptions[0].textContent;
+    document.getElementById('result').innerHTML = `<span>STATUS</span><b>CHECKOUT CREATED</b><code>chk_demo_${Date.now().toString().slice(-6)} / ${product}</code>`;
+    event.currentTarget.textContent = '✓ execution completed';
+    event.currentTarget.disabled = false;
+  });
+
+  function addLog(event, actor, status) {
+    const row = document.createElement('div');
+    const now = new Date().toLocaleTimeString('ja-JP', { hour12: false });
+    row.className = 'audit-row flash';
+    row.innerHTML = `<span>${now}</span><strong>${event}</strong><span>${actor}</span><i class="ok">${status}</i><code>tr_${Math.random().toString(16).slice(2, 6)}</code>`;
+    document.getElementById('logs').prepend(row);
+  }
+
+  const canvas = document.getElementById('network');
+  const ctx = canvas.getContext('2d');
+  let points = [];
+  function resize() {
+    canvas.width = innerWidth * devicePixelRatio;
+    canvas.height = innerHeight * devicePixelRatio;
+    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    points = Array.from({ length: Math.min(55, Math.floor(innerWidth / 22)) }, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .15, vy: (Math.random() - .5) * .15 }));
+  }
+  function draw() {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    points.forEach((p, i) => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > innerWidth) p.vx *= -1;
+      if (p.y < 0 || p.y > innerHeight) p.vy *= -1;
+      ctx.fillStyle = '#38dff833'; ctx.fillRect(p.x, p.y, 2, 2);
+      points.slice(i + 1).forEach((q) => {
+        const d = Math.hypot(p.x - q.x, p.y - q.y);
+        if (d < 125) { ctx.strokeStyle = `rgba(56,223,248,${(1 - d / 125) * .07})`; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); }
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  addEventListener('resize', resize);
+  resize(); draw(); renderManifest();
 })();

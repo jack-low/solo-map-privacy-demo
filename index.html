@@ -6,84 +6,111 @@
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
-  <title>solo-map.app | AI購買秘書デモ</title>
+  <title>solo-map AI Commerce | Agent-only Demo</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="range.css">
 </head>
 <body>
+  <canvas id="network" aria-hidden="true"></canvas>
   <header>
-    <a href="#top" class="brand"><i>✦</i> solo-map.app</a>
-    <div class="privacy"><b>PRIVACY DEMO</b><span>外部送信・決済・保存なし</span></div>
+    <a href="#top" class="brand"><span>&gt;_</span> solo-map</a>
+    <nav><a href="#connect">Connect</a><a href="#tools">Tools</a><a href="#run">Run</a><a href="#audit">Audit</a></nav>
+    <div class="live"><i></i> SANDBOX ONLINE</div>
   </header>
+
   <main id="top">
     <section class="hero">
-      <div>
-        <p class="kicker">AI SHOPPING ASSISTANT</p>
-        <h1>AI購買秘書が、<br>あなたの代わりに考えて買う。</h1>
-        <p>必要なものを、最適なタイミングで。無駄なく、説明できる理由で。人間の承認を尊重してサポートします。</p>
-        <div class="hero-actions">
-          <button type="button" class="primary" data-scroll="recommend">AI提案を見る</button>
-          <button type="button" class="ghost" id="window-shopping">ウィンドウショッピング</button>
+      <p class="num">01 _ AGENT COMMERCE</p>
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">MCP / API / SKILL-FIRST COMMERCE</p>
+          <h1>人間は買えない。<br><em>AIだけが購入できるEC。</em></h1>
+          <p class="lead">認証済みAIエージェントが商品を探索し、Purchase Intentを生成。Policy Engineを通過したリクエストだけがCheckout Toolを実行します。</p>
+          <div class="actions"><button type="button" class="primary" data-jump="connect">エージェントを接続</button><button type="button" class="secondary" id="copy-command">install command</button></div>
+        </div>
+        <div class="terminal">
+          <div class="terminal-head"><span></span><span></span><span></span><b>agent://solo-map/session</b></div>
+          <pre id="terminal"><i>$</i> npx solo-map-agent install
+<span>✓ MCP manifest discovered</span>
+<span>✓ purchase skill requested</span>
+<b>waiting for scope approval...</b></pre>
         </div>
       </div>
-      <div class="hero-art"><span>⌁</span><b>AI</b><em>承認待ち 1</em></div>
+      <div class="protocols"><span>MCP 2026-03</span><span>REST API v1</span><span>SKILL PACKAGE</span><span>POLICY ENGINE</span><span>STRIPE TOOL</span></div>
     </section>
 
-    <section class="trust">
-      <article><b>◴</b><div><strong>時間の節約</strong><span>探す・比較する時間を削減</span></div></article>
-      <article><b>◇</b><div><strong>無駄の削減</strong><span>必要なものを必要な分だけ</span></div></article>
-      <article><b>♧</b><div><strong>買い忘れ防止</strong><span>最適なタイミングで通知</span></div></article>
-      <article><b>▢</b><div><strong>プライバシー保護</strong><span>デモは外部通信なし</span></div></article>
-    </section>
-
-    <section class="recommend" id="recommend">
-      <div class="section-head"><div><p class="kicker">RECOMMENDATIONS</p><h2>AIからのおすすめ</h2><p>生活最適化を優先し、売り込みではなく理由ある提案を並べています。</p></div><span id="count">6件の提案</span></div>
-      <div class="filters" role="group" aria-label="商品カテゴリ">
-        <button type="button" class="active" data-category="すべて">すべて</button>
-        <button type="button" data-category="飲料">飲料・水</button>
-        <button type="button" data-category="日用品">日用品</button>
-        <button type="button" data-category="健康">美容・健康</button>
-      </div>
-      <div class="product-grid" id="product-grid"></div>
-    </section>
-
-    <section class="detail panel" id="detail" aria-live="polite">
-      <div class="product-visual" id="detail-icon">水</div>
-      <div class="detail-copy">
-        <p class="kicker">AI提案の詳細</p><h2 id="detail-name">天然水 2L × 12本</h2><strong id="detail-price">¥1,680</strong>
-        <ul id="detail-reasons"></ul>
-        <div class="approval"><span>AI確信度</span><b id="detail-score"></b></div>
-        <button type="button" class="primary" id="approve">理由を確認して承認</button>
-        <button type="button" class="ghost" id="skip">今回は見送る</button>
+    <section id="connect">
+      <p class="num">02 _ CONNECT</p>
+      <div class="section-title"><h2><span>▣</span> Agent Gateway</h2><p>接続クライアントと認証方式を選択し、Install Sessionを生成。</p></div>
+      <div class="connect-grid">
+        <div class="client-list panel">
+          <button type="button" class="client active" data-client="Codex App" data-method="mcp"><b>⌘</b><span><strong>Codex App</strong><small>MCP server discovery</small></span><i>CONNECTED</i></button>
+          <button type="button" class="client" data-client="Codex CLI" data-method="skill"><b>&gt;_</b><span><strong>Codex CLI</strong><small>Skill package / callback</small></span><i>READY</i></button>
+          <button type="button" class="client" data-client="Local LLM" data-method="api"><b>◎</b><span><strong>Local LLM</strong><small>REST API / Agent key</small></span><i>READY</i></button>
+        </div>
+        <div class="panel manifest">
+          <div class="panel-head"><span>agent-manifest.json</span><b id="method">MCP</b></div>
+          <pre id="manifest"></pre>
+          <button type="button" class="primary wide" id="install">Install Sessionを作成</button>
+        </div>
       </div>
     </section>
 
-    <section class="settings panel">
-      <div><p class="kicker">PURCHASE POLICY</p><h2>AI購入の設定</h2><p>数値を変えると、推薦スコアと提案順がその場で変化します。</p></div>
-      <div class="sliders">
-        <label>価格重視 <span class="range-value">72</span><input type="range" min="0" max="100" value="72"></label>
-        <label>品質重視 <span class="range-value">68</span><input type="range" min="0" max="100" value="68"></label>
-        <label>利便性重視 <span class="range-value">86</span><input type="range" min="0" max="100" value="86"></label>
-        <label>環境・サステナブル <span class="range-value">55</span><input type="range" min="0" max="100" value="55"></label>
+    <section id="tools">
+      <p class="num">03 _ TOOL SURFACE</p>
+      <div class="section-title"><h2><span>⌘</span> MCP Tools / API</h2><p>AIが呼び出せる機能は明示的なScopeで制限。</p></div>
+      <div class="tool-rail">
+        <article class="tool-card active"><div><b>01</b><i>POST</i></div><h3>create_purchase_intent</h3><p>商品、理由、価格、緊急度、証跡を含む購入Intentを作成。</p><code>purchase:intent</code></article>
+        <article class="tool-card"><div><b>02</b><i>GET</i></div><h3>search_catalog</h3><p>AI向け構造化カタログを条件・在庫・配送制約から検索。</p><code>catalog:read</code></article>
+        <article class="tool-card"><div><b>03</b><i>POST</i></div><h3>create_checkout</h3><p>承認済みIntentからプロバイダーのCheckout Sessionを生成。</p><code>checkout:create</code></article>
+        <article class="tool-card"><div><b>04</b><i>GET</i></div><h3>read_audit_log</h3><p>Agent、Tool、Policy判定、実行結果を追跡。</p><code>audit:read</code></article>
+      </div>
+      <div class="scope-panel panel">
+        <div><h3>Requested scopes</h3><p>Ownerが初回接続時に許可。AI自身による権限昇格は不可。</p></div>
+        <div id="scopes">
+          <label><input type="checkbox" checked value="purchase:intent"><span>purchase:intent</span></label>
+          <label><input type="checkbox" checked value="catalog:read"><span>catalog:read</span></label>
+          <label><input type="checkbox" checked value="checkout:create"><span>checkout:create</span></label>
+          <label><input type="checkbox" value="account:write"><span>account:write</span></label>
+        </div>
+        <button type="button" class="primary" id="approve-scopes">Scopeを承認</button>
       </div>
     </section>
 
-    <section class="assistant panel">
-      <div class="assistant-head"><span>✦</span><div><b>サポートAIアシスタント</b><small>オンライン / DEMO</small></div></div>
-      <p>オーナー様、こんにちは。必要なものを、購入理由とリスクを添えて提案します。</p>
-      <div class="assistant-card" id="assistant-card"><b>補充のタイミング</b><strong>天然水 2L × 12本</strong><span>残量から約3日後に不足する見込みです。</span></div>
-      <button type="button" class="primary" id="reroll">別の提案を考える</button>
-      <div class="checks"><span>◴ 時間の節約</span><span>♢ リスク判定</span><span>◇ 配送トークン連携</span></div>
+    <section id="run">
+      <p class="num">04 _ EXECUTION</p>
+      <div class="section-title"><h2><span>▷</span> Agent Purchase Run</h2><p>AIによる購入実行をステップ単位で再現。</p></div>
+      <div class="run-grid">
+        <div class="panel request">
+          <div class="panel-head"><span>tool arguments</span><b>JSON</b></div>
+          <label>Product<select id="product"><option value="water">天然水 2L × 12本 / ¥1,680</option><option value="filter">交換フィルター / ¥980</option><option value="coffee">コーヒー豆 1kg / ¥2,480</option></select></label>
+          <label>Agent reason<textarea id="reason">消費ログから3日後の在庫切れを予測。価格は直近平均を下回り、予算Policy内。</textarea></label>
+          <div class="request-meta"><span>agent_id <b>codex-demo-01</b></span><span>risk <b>low</b></span><span>mode <b>sandbox</b></span></div>
+          <button type="button" class="primary wide" id="execute">create_purchase_intent()</button>
+        </div>
+        <div class="pipeline panel">
+          <div class="stage" data-stage="auth"><b>01</b><span><strong>Agent Auth</strong><small>X-Agent-API-Key</small></span><i>WAIT</i></div>
+          <div class="stage" data-stage="intent"><b>02</b><span><strong>Purchase Intent</strong><small>schema validation</small></span><i>WAIT</i></div>
+          <div class="stage" data-stage="policy"><b>03</b><span><strong>Policy Engine</strong><small>budget / scope / risk</small></span><i>WAIT</i></div>
+          <div class="stage" data-stage="checkout"><b>04</b><span><strong>Checkout Tool</strong><small>provider delegation</small></span><i>WAIT</i></div>
+          <div class="result" id="result"><span>STATUS</span><b>IDLE</b><code>Awaiting agent tool call</code></div>
+        </div>
+      </div>
     </section>
 
-    <section class="receipt panel" id="receipt" hidden>
-      <p class="kicker">MOCK RECEIPT</p><h2>承認フローを完了しました</h2>
-      <p id="receipt-copy"></p>
-      <dl><div><dt>決済</dt><dd>実行なし</dd></div><div><dt>個人情報</dt><dd>取得なし</dd></div><div><dt>保存</dt><dd>ページ再読込まで</dd></div></dl>
+    <section id="audit">
+      <p class="num">05 _ OBSERVABILITY</p>
+      <div class="section-title"><h2><span>⌁</span> Audit Stream</h2><p>AIの判断とツール実行を、あとから説明できる状態で保存。</p></div>
+      <div class="panel audit-table">
+        <div class="audit-row head"><span>TIME</span><span>EVENT</span><span>ACTOR</span><span>STATUS</span><span>TRACE</span></div>
+        <div id="logs">
+          <div class="audit-row"><span>19:00:01</span><strong>gateway.session.opened</strong><span>codex-demo-01</span><i class="ok">OK</i><code>tr_91f2</code></div>
+          <div class="audit-row"><span>19:00:02</span><strong>skill.manifest.loaded</strong><span>solo-map-agent</span><i class="ok">OK</i><code>tr_91f3</code></div>
+        </div>
+      </div>
     </section>
   </main>
-  <footer>solo-map AI Commerce privacy demo / All data is fictional.</footer>
+  <footer><span>&gt;_ solo-map AI Commerce</span><b>AI AGENTS ONLY / HUMAN CHECKOUT DISABLED</b></footer>
   <script src="app.js"></script>
 </body>
 </html>

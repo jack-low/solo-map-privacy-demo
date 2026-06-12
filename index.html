@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; frame-ancestors 'none'; base-uri 'none'">
+  <title>solo-map AI Commerce | Privacy Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside>
+    <a class="brand" href="#home"><span>✦</span> solo-map.app</a>
+    <p class="demo-badge">PRIVACY DEMO</p>
+    <nav aria-label="デモ画面">
+      <button type="button" class="active" data-view="home">概要 <small>安全なデモ環境</small></button>
+      <button type="button" data-view="link">AI紐づけ <small>架空エージェント</small></button>
+      <button type="button" data-view="approval">Owner承認 <small>権限を確認</small></button>
+      <button type="button" data-view="purchase">購入実行 <small>モック決済</small></button>
+      <button type="button" data-view="history">監査履歴 <small>端末内のみ</small></button>
+    </nav>
+    <div class="privacy-note"><strong>外部通信なし</strong><span>入力・決済・Cookie・解析・個人情報保存を行いません。</span></div>
+  </aside>
+  <main>
+    <header>
+      <div><strong>AIおつかいサービス</strong><span>Owner → AI Link → Approval → Purchase</span></div>
+      <span class="status"><i></i> DEMO / LOCAL ONLY</span>
+    </header>
+
+    <section class="view active" id="home">
+      <p class="eyebrow">SOLO-MAP AI COMMERCE</p>
+      <h1>AIに任せる。<br><em>決定権は、人間に残す。</em></h1>
+      <p class="lead">AIエージェントによる商品提案、権限承認、購入、監査を一つの導線にまとめたプロトタイプです。</p>
+      <div class="metrics">
+        <article><span>接続AI</span><strong>3</strong><small>すべて架空データ</small></article>
+        <article><span>承認待ち</span><strong>1</strong><small>Owner確認が必要</small></article>
+        <article><span>外部送信</span><strong>0</strong><small>network blocked</small></article>
+      </div>
+      <div class="panel flow">
+        <div><b>01</b><strong>AIが提案</strong><span>必要性と予算を整理</span></div>
+        <div><b>02</b><strong>人間が承認</strong><span>権限と金額を確認</span></div>
+        <div><b>03</b><strong>決済を委譲</strong><span>カード情報は保持しない</span></div>
+        <div><b>04</b><strong>履歴を監査</strong><span>誰が何をしたか記録</span></div>
+      </div>
+      <button type="button" class="primary next" data-next="link">デモを開始 <span>→</span></button>
+    </section>
+
+    <section class="view" id="link">
+      <p class="eyebrow">STEP 01 / AI LINK</p><h2>利用するAIを選択</h2>
+      <p class="lead">このデモの名称・IDはすべて架空です。実アカウントには接続しません。</p>
+      <div class="cards">
+        <button type="button" class="agent selected"><b>⌘</b><strong>Codex App</strong><span>Desktop agent</span></button>
+        <button type="button" class="agent"><b>&gt;_</b><strong>Codex CLI</strong><span>Terminal agent</span></button>
+        <button type="button" class="agent"><b>◎</b><strong>Local LLM</strong><span>Private runtime</span></button>
+      </div>
+      <div class="panel summary"><span>DEMO AGENT ID</span><code>agent_demo_7F2A</code><span>要求権限</span><strong>商品検索 / 購入Intent作成 / 履歴読み取り</strong></div>
+      <button type="button" class="primary next" data-next="approval">このAIで続ける <span>→</span></button>
+    </section>
+
+    <section class="view" id="approval">
+      <p class="eyebrow">STEP 02 / OWNER APPROVAL</p><h2>AIに渡す権限を確認</h2>
+      <div class="panel permissions">
+        <label><input type="checkbox" checked> 商品候補の検索と比較</label>
+        <label><input type="checkbox" checked> 5,000円以下の購入Intent作成</label>
+        <label><input type="checkbox"> 承認なしの自動購入 <mark>非推奨</mark></label>
+      </div>
+      <p class="guard">このデモでは、承認操作もブラウザ内の表示変更だけです。認証情報は要求しません。</p>
+      <button type="button" class="primary next" data-next="purchase">安全な設定で承認 <span>→</span></button>
+    </section>
+
+    <section class="view" id="purchase">
+      <p class="eyebrow">STEP 03 / MOCK PURCHASE</p><h2>AIからの購入提案</h2>
+      <div class="panel product">
+        <div class="product-art">H₂O</div>
+        <div><span>定期消耗品</span><h3>天然水 2L × 12本</h3><p>前回の消費ペースから、3日後に不足する見込みです。</p></div>
+        <strong>¥1,980</strong>
+      </div>
+      <div class="panel rationale"><strong>AIの判断根拠</strong><p>予算上限内 / 過去価格比 -8% / 在庫切れ予測あり。配送先・カード情報はこのデモに存在しません。</p></div>
+      <button type="button" class="primary" id="mock-buy">モック購入を承認 <span>→</span></button>
+      <p id="result" role="status"></p>
+    </section>
+
+    <section class="view" id="history">
+      <p class="eyebrow">AUDIT TRAIL</p><h2>操作履歴</h2>
+      <div class="panel timeline" id="timeline">
+        <div><time>DEMO</time><strong>プライバシーモードで起動</strong><span>外部API、Cookie、永続ストレージを無効化</span></div>
+        <div><time>DEMO</time><strong>架空エージェントを表示</strong><span>agent_demo_7F2A</span></div>
+      </div>
+      <button type="button" class="secondary" id="reset">デモ状態をリセット</button>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

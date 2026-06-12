@@ -40,7 +40,7 @@
     render(button.dataset.category);
   }));
   document.querySelectorAll('input[type="range"]').forEach((input) => input.addEventListener('input', () => {
-    input.previousElementSibling.value = input.value;
+    input.previousElementSibling.textContent = input.value;
     const adjustment = Math.round((Number(input.value) - 50) / 20);
     products.forEach((item, index) => { item.score = Math.max(65, Math.min(99, 94 - index * 4 + adjustment)); });
     render(document.querySelector('.filters .active').dataset.category);

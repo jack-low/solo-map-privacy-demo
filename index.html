@@ -8,6 +8,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; frame-ancestors 'none'; base-uri 'none'">
   <title>solo-map.app | AI購買秘書デモ</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="range.css">
 </head>
 <body>
   <header>
@@ -49,7 +50,7 @@
     <section class="detail panel" id="detail" aria-live="polite">
       <div class="product-visual" id="detail-icon">水</div>
       <div class="detail-copy">
-        <p class="kicker">AI提案の詳細</p><h2 id="detail-name"></h2><strong id="detail-price"></strong>
+        <p class="kicker">AI提案の詳細</p><h2 id="detail-name">天然水 2L × 12本</h2><strong id="detail-price">¥1,680</strong>
         <ul id="detail-reasons"></ul>
         <div class="approval"><span>AI確信度</span><b id="detail-score"></b></div>
         <button type="button" class="primary" id="approve">理由を確認して承認</button>
@@ -60,10 +61,10 @@
     <section class="settings panel">
       <div><p class="kicker">PURCHASE POLICY</p><h2>AI購入の設定</h2><p>数値を変えると、推薦スコアと提案順がその場で変化します。</p></div>
       <div class="sliders">
-        <label>価格重視 <output>72</output><input type="range" min="0" max="100" value="72"></label>
-        <label>品質重視 <output>68</output><input type="range" min="0" max="100" value="68"></label>
-        <label>利便性重視 <output>86</output><input type="range" min="0" max="100" value="86"></label>
-        <label>環境・サステナブル <output>55</output><input type="range" min="0" max="100" value="55"></label>
+        <label>価格重視 <span class="range-value">72</span><input type="range" min="0" max="100" value="72"></label>
+        <label>品質重視 <span class="range-value">68</span><input type="range" min="0" max="100" value="68"></label>
+        <label>利便性重視 <span class="range-value">86</span><input type="range" min="0" max="100" value="86"></label>
+        <label>環境・サステナブル <span class="range-value">55</span><input type="range" min="0" max="100" value="55"></label>
       </div>
     </section>
 
